@@ -5,9 +5,9 @@ A USB microcontroller device that will control hardware peripherals for a raspbe
   10.28.2025: I need to pause the project due to budgeting, time, and knowledge constraints. I fully intend to keep developing the project.  
   
 # Learning / Resources  
-  ESP32 Tutorials
+  ESP32 Tutorials  
   https://randomnerdtutorials.com/projects-esp32/  
-  Teensy 4.1 (The MCU we'll port this project to eventually!)
+  Teensy 4.1 (The MCU we'll port this project to eventually!)  
   https://www.pjrc.com/store/teensy41.html 
   
 # Vision:  
