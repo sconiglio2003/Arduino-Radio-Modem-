@@ -1,8 +1,12 @@
 # Arduino-Radio-Modem-
-A USB device that will control peripherals for a raspberry pi central OS.  
-Development:  
-  10.28.2025: I need to pause the project due to budgeting and leraning constraints. I fully intend to keep developing the project. 
+A USB microcontroller device that will control hardware peripherals for a raspberry pi central OS (which will be written using the circle project) 
 
+# Development:  
+  10.28.2025: I need to pause the project due to budgeting and leraning constraints. I fully intend to keep developing the project.  
+  
+# Learning / Resources  
+  https://randomnerdtutorials.com/projects-esp32/  
+  
 # Vision:  
   Utilize a circle project custom C++ kernel and a raspberry pi 3 B+ with a teensy 4.0 to make a laptop similar device with a  
   long range 900Mhz telementry UART modem and lots of interesting stuff - even HDMI display.  
