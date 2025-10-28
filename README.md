@@ -2,10 +2,13 @@
 A USB microcontroller device that will control hardware peripherals for a raspberry pi central OS (which will be written using the circle project) 
 
 # Development:  
-  10.28.2025: I need to pause the project due to budgeting and leraning constraints. I fully intend to keep developing the project.  
+  10.28.2025: I need to pause the project due to budgeting, time, and knowledge constraints. I fully intend to keep developing the project.  
   
 # Learning / Resources  
+  ESP32 Tutorials
   https://randomnerdtutorials.com/projects-esp32/  
+  Teensy 4.1 (The MCU we'll port this project to eventually!)
+  https://www.pjrc.com/store/teensy41.html 
   
 # Vision:  
   Utilize a circle project custom C++ kernel and a raspberry pi 3 B+ with a teensy 4.0 to make a laptop similar device with a  
