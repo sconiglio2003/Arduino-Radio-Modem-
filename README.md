@@ -1,5 +1,5 @@
 # Arduino-Radio-Modem-
-A USB device that will control peripherals for a 
+A USB device that will control peripherals for a raspberry pi central OS.  
 Development:  
   10.28.2025: I need to pause the project due to budgeting and leraning constraints. I fully intend to keep developing the project. 
 
