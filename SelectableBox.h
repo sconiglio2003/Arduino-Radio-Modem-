@@ -39,7 +39,7 @@ public:
     if (initialDrawing) {
       tft.drawRect(this->x, this->y, this->width, this->height, TFT_WHITE);
       tft.fillRect(this->x + 1, this->y + 1, this->width - 2, this->height - 2, this->backgroundColor);
-      tft.setCursor(this->x, this->y);
+      tft.setCursor(this->x+1, this->y+1);
       tft.setTextColor(this->textColor);
       tft.println(this->title);
       tft.println(this->content);
@@ -59,7 +59,7 @@ public:
       }
       tft.drawRect(this->x, this->y, this->width, this->height, TFT_WHITE);
       tft.fillRect(this->x + 1, this->y + 1, this->width - 2, this->height - 2, this->backgroundColor);
-      tft.setCursor(this->x, this->y);
+      tft.setCursor(this->x+1, this->y+1);
       tft.setTextColor(this->textColor);
       tft.println(this->title);
       tft.println(this->content);
@@ -74,11 +74,12 @@ public:
     }
   }
   void blinkCornerPixel() {
+    int dotWidth = 10; 
     if (millis() - this->lastCornerBlink > this->cornerBlinkFrequency) {
       if (cornerPixelBlackOrWhite) {
-        tft.fillRect(this->x+this->width-4,this->y,4,4,TFT_WHITE); 
+        tft.fillRect(this->x+this->width-dotWidth,this->y,dotWidth,dotWidth,TFT_WHITE); 
       } else {
-        tft.fillRect(this->x+this->width-4,this->y,4,4,TFT_BLACK);
+        tft.fillRect(this->x+this->width-dotWidth,this->y,dotWidth,dotWidth,TFT_BLACK);
       }
       lastCornerBlink = millis(); 
       cornerPixelBlackOrWhite = !cornerPixelBlackOrWhite; 
