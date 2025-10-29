@@ -32,11 +32,6 @@ A USB microcontroller device that will control hardware peripherals for a raspbe
   GPS, buttons, and even accelerometer. The Teensy will also control an addressable LED for indicating things, and also it will  
   control a buzzer that makes tones for alerting the user to errors and button presses, radio transmissions, etc. 
 # Pre-Requisites
-  Designed for ESP32 Wroom-32 (Will be moved to Teensy ASAP) 
+  This code is written for ESP32-WROOM32 - make sure Arduino IDE is configured accordingly.  
   Written in Arduino C++
-# Wiring  
-  Power LED  
-  Buttons  
-  TFT  
-  Buzzer 
 # Video Demo 
