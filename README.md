@@ -4,6 +4,13 @@ A USB microcontroller device that will control hardware peripherals for a raspbe
 # Development:  
   10.28.2025: I need to pause the project due to budgeting, time, and knowledge constraints. I fully intend to keep developing the project.  
   
+# NOTICE ///// NOTICE ///// NOTICE ///// NOTICE /////  
+  Originally, this entire radio modem project was intended to fit onto an ESP32.  
+  I have moved away from this concept.  
+  In the new version, the MCU controls ICs, sensors, and other data peripherals and sends them over USB to the raspberry pi.  
+  The RFD900x will be connected via USB to the raspberry pi, not the MCU.  
+  Since this was not originally the concept, the code will appear to be exclusively for an ESP32. It was originally.  
+  
 # Learning / Resources  
   ESP32 Tutorials  
   https://randomnerdtutorials.com/projects-esp32/  
