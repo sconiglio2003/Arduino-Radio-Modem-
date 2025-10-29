@@ -4,6 +4,14 @@
 //    pins 6 - 11 are reserved for SPI flash.
 //    pins 34, 35, 36, 39 are input only.
 // LEDs utilized for important indications.
+
+
+
+
+
+
+
+
 int POWER_LED_PIN = 16;
 unsigned long POWER_LED_PIN_DIM_FREQUENCY = 10;
 unsigned long POWER_LED_BRIGHTNESS = 0;
@@ -88,7 +96,7 @@ unsigned long BUTTON_COOLDOWN_TIME = 100;
 #include "driver/rtc_io.h"
 #define BUTTON_PIN_BITMASK(GPIO) (1ULL << GPIO)  // 2 ^ GPIO_NUMBER in hex
 #define USE_EXT0_WAKEUP 1                        // 1 = EXT0 wakeup, 0 = EXT1 wakeup
-#define WAKEUP_GPIO GPIO_NUM_33                  // Only RTC IO are allowed - ESP32 Pin example
+#define WAKEUP_GPIO GPIO_NUM_12                  // Only RTC IO are allowed - ESP32 Pin example
 
 // TFT screen stuff.
 #include <SPI.h>
@@ -117,7 +125,28 @@ unsigned int G = 392;
 
 // a test for a button class.
 #include "SelectableBox.h"
-SelectableBox myBox = SelectableBox(0, 200, 100, 100, "Title", "This is the content. ", false, tft);
+SelectableBox myBox = SelectableBox(0, 200, 300, 100, "Title", "This is the content. ", false, tft);
+
+// Variables for the demonstration of multiple selectable boxes.
+int boxHeight = 50;
+int boxWidth = 200;
+SelectableBox box1 = SelectableBox(0, 400, boxWidth, boxHeight, "Box 1", "Click me!", false, tft);
+SelectableBox box2 = SelectableBox(0, 400, boxWidth, boxHeight, "Box 2", "No, click me!", false, tft);
+SelectableBox box3 = SelectableBox(0, 400, boxWidth, boxHeight, "Box 3", "Please click me!", false, tft);
+SelectableBox box4 = SelectableBox(0, 400, boxWidth, boxHeight, "Box 4", "DONT click me!", false, tft);
+SelectableBox box5 = SelectableBox(0, 400, boxWidth, boxHeight, "Box 5", "DO click me!", false, tft);
+SelectableBox box6 = SelectableBox(0, 400, boxWidth, boxHeight, "Box 6", "MAYBE click me!", false, tft);
+SelectableBox box7 = SelectableBox(0, 400, boxWidth, boxHeight, "Box 7", "Perhaps click me!", false, tft);
+int selectedBoxIndex = 0;
+// array of selectable boxes
+SelectableBox myBoxes[] = {
+  box1, box2, box3, box4, box5, box6, box7
+};
+// controls how quickliy you can scroll through the list of selectable boxes.
+unsigned long lastScrollTimeStamp = 0;
+unsigned long maxScrollFrequency = 100;
+
+
 void setup() {
   coolStartupScreen();
   tft.setTextSize(1);
@@ -162,14 +191,42 @@ void loop() {
     LAST_BUTTON_SAMPLE_TIMESTAMP = millis();
     processButtonPresses();
   }
-  myBox.update();
-  if (OK_BUTTON_STATE) {
-    myBox.flip();
+  // update all boxes
+  for (int i = 0; i < (sizeof(myBoxes) / sizeof(myBoxes[0])) /*-1*/; i++) {
+    myBoxes[i].y = (i * boxHeight) + 100;
+    myBoxes[i].update();
+    // Boxes that were hovered over, but no longer, need to be "un-hovered" over.
+    if (i == selectedBoxIndex) {
+      myBoxes[i].hoveredOver = true;
+    } else {
+      myBoxes[i].hoveredOver = false;
+    }
   }
-  if(RIGHT_ARROW_KEY_STATE) {
-    myBox.hoveredOver=true; 
-  } else {
-    myBox.hoveredOver = false; 
+
+  // Wherever the selectedBoxIndex is, that box is hovered over.
+  if (OK_BUTTON_STATE) {
+    myBoxes[selectedBoxIndex].flip();
+  }
+
+
+
+  if (millis() - lastScrollTimeStamp > maxScrollFrequency) {
+    lastScrollTimeStamp = millis();
+    // right arrow key scrolls forwards through boxes.
+    if (RIGHT_ARROW_KEY_STATE) {
+      selectedBoxIndex++;
+      if (selectedBoxIndex > ((sizeof(myBoxes) / sizeof(myBoxes[0])) - 1)) {
+        selectedBoxIndex = 0;
+      }
+    }
+
+    // left arrow key scrolls backwards through boxes.
+    if (LEFT_ARROW_KEY_STATE) {
+      selectedBoxIndex--;
+      if (selectedBoxIndex < 0) {
+        selectedBoxIndex = ((sizeof(myBoxes) / sizeof(myBoxes[0])) - 1);
+      }
+    }
   }
 }
 // utilized to pulse the power LED to indicate the radio's state.
@@ -206,19 +263,18 @@ void DEEP_SLEEP() {
   // No need to keep that power domain explicitly, unlike EXT1.
   rtc_gpio_pullup_dis(WAKEUP_GPIO);
   rtc_gpio_pulldown_en(WAKEUP_GPIO);
+  String warning = "Going to sleep 5 seconds";
+  SelectableBox sleepWarning = SelectableBox(0, 0, 300, 100, "System", warning, false, tft);
   //Go to sleep now
-  tft.println("Going to sleep in 5 seconds ");
   unsigned long interval = 1000;
   unsigned long previousMillis = 0;
   unsigned long currentMillis = 0;
   bool waiting = true;
   int counter = 5;
   while (waiting) {
+    sleepWarning.update();
     currentMillis = millis();
     if (currentMillis - previousMillis > interval) {
-      tft.print(counter);
-      tft.print("s");
-      tft.println();
       previousMillis = currentMillis;
       counter--;
       if (counter < 0) {
@@ -321,6 +377,7 @@ void RFD900X_TRANSMIT_STRING(String message) {
 // Here, we process inputs and act accordingly. Hopefully it's not a terrible idea . . . (Because different screens
 // will use the same button for different purposes . .. . . )
 void processButtonPresses() {
+  // ok button
   if (millis() - LAST_OK_BUTTON_PRESS > BUTTON_COOLDOWN_TIME) {
     if (digitalRead(OK_BUTTON_PIN)) {
       Serial.println("OK BUTTON");
@@ -332,6 +389,7 @@ void processButtonPresses() {
     }
   }
 
+  // right arrow key
   if (millis() - LAST_RIGHT_ARROW_KEY_PRESS > BUTTON_COOLDOWN_TIME) {
     if (digitalRead(RIGHT_ARROW_KEY)) {
       Serial.println("RIGHT ARROW KEY ");
@@ -343,6 +401,7 @@ void processButtonPresses() {
     }
   }
 
+  // left arrow key
   if (millis() - LAST_LEFT_ARROW_KEY_PRESS > BUTTON_COOLDOWN_TIME) {
     if (digitalRead(LEFT_ARROW_KEY)) {
       Serial.println("LEFT ARROW KEY");
